@@ -1,0 +1,5 @@
+{
+  "BUCKET": "diy-url-shortener",
+  "REGION": "us-east-1",
+  "STAGE": "prod"
+}

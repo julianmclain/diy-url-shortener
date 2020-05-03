@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My URL Shortener</title>
+  <link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+<body>
+  <h2>My URL Shortener</h2>
+  <div id="message" class="alert alert-primary"></div>
+  <form
+    action="https://w3yi4q93ng.execute-api.us-east-1.amazonaws.com/prod/"
+    id="form"
+  >
+    <div class="form-group">
+      <label for="longUrl">Enter a URL to shorten</label>
+      <input
+        class="input-block"
+        name="longUrl"
+        type="url"
+        id="longUrl"
+        autocomplete="off"
+        required
+      />
+    </div>
+    <input class="submit-btn" type="submit" value="Shorten URL" />
+  </form>
+  <script type="text/javascript" src="index.js"></script>
+</body>
+</html>
