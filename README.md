@@ -5,8 +5,7 @@ A simple tool to shorten URLs. Built as cheaply as possible using mostly AWS s3,
 ## Notes
 
 ### Setting up s3 to store redirects
-With s3 you can configure requests to an object to respond with a 301 redirect
-to another URL. Source: [AWS documentation - how to page
+With s3, you can 301 redirect requests to another URL. Source: [AWS documentation - how to page
 redirect](https://docs.aws.amazon.com/AmazonS3/latest/dev/how-to-page-redirect.html).
 
 ### Writing the Lambda code
@@ -30,7 +29,7 @@ promises](https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/usin
 ```
 
 ### Enforcing access to s3 via CLoudFront
-If you want to use an SSL cert from ACL with CLoudFront, make sure you [generate
+If you want to use an SSL cert from ACL with CloudFront, make sure you [generate
 the cert in the US East
 region](https://aws.amazon.com/premiumsupport/knowledge-center/migrate-ssl-cert-us-east/).
 So annoying >.< 
