@@ -21,24 +21,5 @@ functions:
           cors: true
 
 resources:  
-  Resources:    
-    RedirectS3Bucket:
-      Type: AWS::S3::Bucket     
-      Properties:        
-        BucketName: ${file(config.json):BUCKET}        
-        AccessControl: PublicRead        
-        WebsiteConfiguration:          
-          IndexDocument: index.html    
-    RedirectS3BucketPolicy:      
-      Type: AWS::S3::BucketPolicy     
-      Properties:        
-        Bucket: ${file(config.json):BUCKET}        
-        PolicyDocument:          
-          Statement:          
-            -
-              Action:            
-                - s3:GetObject            
-              Effect: Allow            
-              Resource:            
-                - arn:aws:s3:::${file(config.json):BUCKET}/*            
-              Principal: "*"
+  - ${file(resources/api-gateway-errors.yml)}
+  - ${file(resources/s3-bucket.yml)}

@@ -6,7 +6,7 @@ const fs = require('fs')
 const AWS = require('aws-sdk');
 
 const s3 = new AWS.S3();
-const config = JSON.parse(fs.readFileSync('config.json'))
+const config = JSON.parse(fs.readFileSync('config.json'));
 
 async function validate (longUrl) {
   if (!longUrl) {
@@ -27,22 +27,30 @@ async function validate (longUrl) {
   return longUrl;
 }
 
-async function getShortUrl (longUrl) {
+async function getPath (longUrl) {
   const path = nanoid(7)
-  if (isPathFree) {
+  if (isAvailable(path)) {
     return path
   }
-  getShortUrl(longUrl)
+  getPath(longUrl)
 }
 
-async function isPathFree(path) {
-  return true
-}
-
-async function saveRedirect(shortUrl, longUrl) {
+async function isAvailable(path) {
   const params = {
     Bucket: config.BUCKET,
-    Key: shortUrl,
+    Key: path
+  }
+  // A bit unintuitive, but an error means path is available (no object found)
+  return s3.headObject(params)
+    .promise()
+    .then(result => false)
+    .catch(err => true)
+}
+
+async function saveRedirect(path, longUrl) {
+  const params = {
+    Bucket: config.BUCKET,
+    Key: path,
     'WebsiteRedirectLocation': longUrl
   }
   
@@ -51,11 +59,11 @@ async function saveRedirect(shortUrl, longUrl) {
     .then(() => params.Key)
 }
 
-function buildResponse(statusCode, message, shortUrl) {
+function buildResponse(statusCode, message, path, event, context) {
   const body = { message }
   
-  if (shortUrl) {
-    body.shortUrl = shortUrl
+  if (path) {
+    body.path = path
   }
 
   return {
@@ -70,8 +78,8 @@ function buildResponse(statusCode, message, shortUrl) {
 module.exports.handle = async (event, context) => {
   const { longUrl } = JSON.parse(event.body)
   return validate(longUrl)
-    .then(getShortUrl)
-    .then(shortUrl => saveRedirect(shortUrl, longUrl))
-    .then(shortUrl => buildResponse(200, 'URL successfully shortened', shortUrl))
+    .then(getPath)
+    .then(path => saveRedirect(path, longUrl))
+    .then(path => buildResponse(200, 'URL successfully shortened', path))
     .catch(err => buildResponse(err.statusCode, err.message));
 }

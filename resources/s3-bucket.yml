@@ -1,0 +1,25 @@
+Resources:    
+  RedirectS3Bucket:
+    Type: AWS::S3::Bucket     
+    Properties:        
+      BucketName: ${file(config.json):BUCKET}        
+      AccessControl: PublicRead        
+      WebsiteConfiguration:          
+        IndexDocument: index.html    
+  RedirectS3BucketPolicy:
+    Type: AWS::S3::BucketPolicy     
+    Properties:        
+      Bucket: ${file(config.json):BUCKET}        
+      PolicyDocument:          
+        Statement:          
+          -
+            Action:            
+              - s3:GetObject            
+            Effect: Allow            
+            Resource:            
+              - arn:aws:s3:::${file(config.json):BUCKET}/*            
+            Principal: "*"
+# After finishing the project, I updated this s3 policy to enforce access via Cloudfront.
+# See notes in README
+# 3rd option here https://aws.amazon.com/premiumsupport/knowledge-center/cloudfront-serve-static-website/
+# https://abridge2devnull.com/posts/2018/01/restricting-access-to-a-cloudfront-s3-website-origin/

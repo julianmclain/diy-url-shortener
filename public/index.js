@@ -21,23 +21,20 @@ function makeRequest(apiUrl, longUrl) {
 
 async function handleResponse(response) {
   const messageDiv = document.getElementById('message')
+  const responseJson = await response.json()
   
   if (response.ok) {
-    const responseJson = await response.json()
     const shortUrl = 
       window.location.protocol +
       '//' +
       window.location.host +
       '/' +
-      responseJson.shortUrl
+      responseJson.path
     // TODO: add a class on the messageDiv to style it as an success
-
     messageDiv.textContent = `Success: your short URL is ${shortUrl}`
   } else {
     // TODO: add a class on the messageDiv to style it as an error
-    // TODO: figure out how you want to present these errors
-    // TODO: get lambda function to be able to return 400 error when no longUrl present
-    console.error('non 2xx response')
+    messageDiv.textContent = `Error: ${responseJson}`
     console.log(response)
   }
 }
