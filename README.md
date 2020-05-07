@@ -15,9 +15,10 @@ can define handlers as async functions.
 **Source:** [Serverless blog - common mistakes in
 lambda](https://www.serverless.com/blog/common-node8-mistakes-in-lambda/)
 ```javascript
-  module.exports.handle = async (event, context) => {}
-```
+  module.exports.handle = async (event, context) => {
 
+  }
+```
 
 Also, the Node `aws-sdk` has an API lets you treat requests as promises
 instead of using callbacks. **Source:** [AWS docs - using
